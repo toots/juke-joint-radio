@@ -35,24 +35,24 @@ module.exports.getNext = (req, res) => {
   queuedSongs = queuedSongs.slice(1);
   pendingSongs.push(next);
 
-  res.end(next.id);
+  res.end(next.url);
 };
 
 module.exports.isPlaying = (req, res) => {
   if (!req.body) return;
 
-  const { id } = req.body;
+  const { url } = req.body;
 
-  if (!id) {
+  if (!url) {
     nowPlaying = null;
-    return res.end('no id..');;
+    return res.end('no url..');;
   }
 
-  const playing = pendingSongs.find(({id: songId}) => id === songId);
+  const playing = pendingSongs.find(({url: songUrl}) => url === songUrl);
   
   if (!playing) return res.end('no such song!');
 
-  pendingSongs = pendingSongs.filter(({id: songId}) => id !== songId);
+  pendingSongs = pendingSongs.filter(({url: songUrl}) => url !== songUrl);
   nowPlaying = playing;
 
   res.end('Thanks mate!');
@@ -61,9 +61,9 @@ module.exports.isPlaying = (req, res) => {
 module.exports.songRequest = async (req, res, next) => {
   try {
     const twiml = new MessagingResponse();
-    const url = req.body.Body;
+    const r = req.body.Body;
 
-    const song = await getSongInfo(url);
+    const song = await getSongInfo(r);
 
     queuedSongs.push(song);
 

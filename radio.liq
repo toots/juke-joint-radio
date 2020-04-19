@@ -16,18 +16,18 @@ end
 default = blank() # input.http("http://wwoz-sc.streamguys1.com/wwoz-hi.mp3")
 
 def f(_) =
-  [("juke_radio_id", "")]
+  [("juke_radio_url", "")]
 end
 
 default = map_metadata(f, default)
 
 def get_next () =
-  let (status, _, id) = http.get("#{base_url}/get-next")
+  let (status, _, url) = http.get("#{base_url}/get-next")
   let (_, code, _) = status
 
-  if code == 200 and id != "" then
-    json_post("pending-song", [("id",id)])
-    [request.create("annotate:juke_radio_id=\"#{id}\":youtube-dl:#{id}")]
+  if code == 200 and url != "" then
+    json_post("pending-song", [("url",url)])
+    [request.create("annotate:juke_radio_url=\"#{url}\":youtube-dl:#{url}")]
   else
     []
   end
@@ -40,9 +40,9 @@ requests = crossfade(smart=true, requests)
 radio = fallback(track_sensitive=false,[requests, default])
 
 def now_playing(m) =
-  juke_radio_id = m["juke_radio_id"]
+  juke_radio_url = m["juke_radio_url"]
 
-  json_post("is-playing", [("id",juke_radio_id)])
+  json_post("is-playing", [("url",juke_radio_url)])
 end
 
 radio = on_metadata(now_playing, radio)
