@@ -1,3 +1,7 @@
+#!/usr/bin/env liquidsoap
+
+enable_replaygain_metadata()
+
 base_url = "http://localhost:8000"
 
 def json_post (path, data) =
@@ -32,6 +36,8 @@ def get_next () =
 end
 
 requests = request.dynamic(id="requests", get_next)
+
+requests = amplify(1.,override="replay_gain", requests)
 
 requests = crossfade(smart=true, requests)
 
