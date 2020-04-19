@@ -3,12 +3,16 @@
     <tr>
       <td>{{ song.name }}</td>
       <td>{{ song.duration }}</td>
+      <td><em>pending</em></td>
     </tr>
   {% endfor %}
   {% for song in queued %}
     <tr>
       <td>{{ song.name }}</td>
       <td>{{ song.duration }}</td>
+      <td>
+        <a href="#" data-url="{{ song.url }}" class="delete-song">Delete</a>
+      </td>
     </tr>
   {% endfor %}
 </table>

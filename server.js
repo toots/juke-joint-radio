@@ -14,6 +14,7 @@ const {
   queuedSongs,
   getNext,
   isPlaying,
+  deleteSong,
   songRequest
 } = require("./src/songRequest"); 
 
@@ -36,6 +37,7 @@ app.set('view engine', 'liquid');
 
 app.post('/song-request', songRequest);
 app.post('/is-playing', isPlaying);
+app.post('/delete-song', deleteSong);
 app.get('/get-next', getNext);
 
 const templatePayload = () => {

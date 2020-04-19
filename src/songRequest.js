@@ -16,7 +16,6 @@ const getSongInfo = (request) => new Promise((resolve, reject) => {
 
   youtubedl.getInfo(r, (err, info) =>
     err ? reject(err) : resolve({
-      id: info.id,
       name: info.fulltitle,
       duration: info.duration,
       url: info.webpage_url
@@ -54,6 +53,18 @@ module.exports.isPlaying = (req, res) => {
 
   pendingSongs = pendingSongs.filter(({url: songUrl}) => url !== songUrl);
   nowPlaying = playing;
+
+  res.end('Thanks mate!');
+};
+
+module.exports.deleteSong = (req, res) => {
+  if (!req.body) return;
+
+  const { url } = req.body;
+
+  if (!url) return res.end('no url..');;
+
+  queuedSongs = queuedSongs.filter(({url: songUrl}) => url !== songUrl);
 
   res.end('Thanks mate!');
 };

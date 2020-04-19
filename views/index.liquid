@@ -35,23 +35,35 @@
         window.addEventListener('DOMContentLoaded', function () {
           setInterval(function() {
             $.ajax({
-              url: "/now-playing",
-              type: "GET",
+              url: '/now-playing',
+              type: 'GET',
               success: function(data) {
-                $("#now-playing").html(data);
+                $('#now-playing').html(data);
               }
             });
           }, 2000);
 
           setInterval(function() {
             $.ajax({
-              url: "/queued",
-              type: "GET",
+              url: '/queued',
+              type: 'GET',
               success: function(data) {
-                $("#queued").html(data);
+                $('#queued').html(data);
               }
             });
           }, 2000);
+
+          $('#queued').on('click', 'a.delete-song', function (e) {
+            e.preventDefault();
+            var url = $(e.target).data('url');
+            $.ajax({
+              url: '/delete-song',
+              type: 'POST',
+              contentType: 'application/json; charset=utf-8',
+              dataType: 'json',
+              data: JSON.stringify({url: url})
+            });
+          });
 
           var video = document.getElementById('radio');
           if (Hls.isSupported()) {

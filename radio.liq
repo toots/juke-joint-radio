@@ -1,5 +1,3 @@
-set("log.level",3)
-
 base_url = "http://localhost:8000"
 
 def json_post (path, data) =
