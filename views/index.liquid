@@ -1,0 +1,75 @@
+<html>
+  <header>
+    <title>Juke Joint Radio</title>
+    <script src="//cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.5.0.min.js"
+      integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ="
+      crossorigin="anonymous"></script>
+  </header>
+  <body>
+    <div style="width: 1152px; margin: auto; display: block;">
+      <div style="width: 392px; margin: auto;">
+        <img src="logo.jpg" style="width: 400px"/>
+
+        <h1 style="text-align: center;">Juke Joint Radio</h1>
+
+        <div id="now-playing">
+          {% render "now-playing.liquid", nowPlaying: nowPlaying %}
+        </div>
+
+        <audio
+          style="width: 392px; margin: auto;"
+          id="radio"
+          controls
+          preload="auto"
+        ></audio>
+
+        <h3>Queued songs:</h3>
+        <div id="queued" style="width: 392px; margin: auto;">
+          {% render "queued.liquid", pending: pending, queued: queued %}
+        </div>
+      </div>
+
+      <script>
+        window.addEventListener('DOMContentLoaded', function () {
+          setInterval(function() {
+            $.ajax({
+              url: "/now-playing",
+              type: "GET",
+              success: function(data) {
+                $("#now-playing").html(data);
+              }
+            });
+          }, 2000);
+
+          setInterval(function() {
+            $.ajax({
+              url: "/queued",
+              type: "GET",
+              success: function(data) {
+                $("#queued").html(data);
+              }
+            });
+          }, 2000);
+
+          var video = document.getElementById('radio');
+          if (Hls.isSupported()) {
+            var hls = new Hls();
+            hls.loadSource('//jukejoint.rastageeks.org/hls/radio.m3u8');
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, function() {
+              video.play();
+            });
+          }
+          else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = '//jukejoint.rastageeks.org/hls/radio.m3u8';
+            video.addEventListener('loadedmetadata', function() {
+              video.play();
+            });
+          }
+        });
+      </script>
+    </div>
+  </body>
+</html>

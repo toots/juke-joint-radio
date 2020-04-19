@@ -1,0 +1,17 @@
+{
+  "name": "juke-join-radio",
+  "version": "1.0.0",
+  "main": "server.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "liquidjs": "^9.11.10",
+    "twilio": "^3.42.2",
+    "youtube-dl": "^3.0.2"
+  }
+}
