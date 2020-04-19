@@ -13,7 +13,7 @@ def json_post (path, data) =
   add_timeout(0., send)
 end
 
-default = blank() # input.http("http://wwoz-sc.streamguys1.com/wwoz-hi.mp3")
+default = input.http(id="default","http://wwoz-sc.streamguys1.com/wwoz-hi.mp3")
 
 def f(_) =
   [("juke_radio_url", "")]
@@ -41,6 +41,12 @@ radio = fallback(track_sensitive=false,[requests, default])
 
 def now_playing(m) =
   juke_radio_url = m["juke_radio_url"]
+
+  if juke_radio_url == "" then
+    ignore(server.execute("default.start"))
+  else
+    ignore(server.execute("default.stop"))
+  end
 
   json_post("is-playing", [("url",juke_radio_url)])
 end
